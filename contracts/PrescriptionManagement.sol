@@ -69,7 +69,10 @@ contract PrescriptionManagement {
         emit PharmacyRegistered(msg.sender);
     }
 
-    function writePrescription(string memory _prescriptionData) external {
+    function writePrescription(
+        address _patientAddress,
+        string memory _prescriptionData
+    ) external {
         require(
             hospitals[msg.sender].isRegistered,
             "Hospital is not registered"
@@ -80,7 +83,7 @@ contract PrescriptionManagement {
             _prescriptionData,
             false
         );
-        patientPrescriptions[msg.sender].push(newPrescription);
+        patientPrescriptions[_patientAddress].push(newPrescription);
         emit PrescriptionWritten(msg.sender, _prescriptionData);
     }
 
@@ -111,5 +114,17 @@ contract PrescriptionManagement {
         address _patientAddress
     ) external view returns (Prescription[] memory) {
         return patientPrescriptions[_patientAddress];
+    }
+
+    function isHospitalRegistered(
+        address _hospitalAddress
+    ) external view returns (bool) {
+        return hospitals[_hospitalAddress].isRegistered;
+    }
+
+    function isPharmacyRegistered(
+        address _pharmacyAddress
+    ) external view returns (bool) {
+        return pharmacies[_pharmacyAddress].isRegistered;
     }
 }
