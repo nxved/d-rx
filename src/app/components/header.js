@@ -83,7 +83,7 @@ export default function Header() {
         className="px-8 py-2 text-xs font-semibold uppercase border"
         onClick={handleWallet}
       >
-        {addr ? "Disconnect" : "Connect Your Wallet"}
+        {addr ? "Disconnect" : "Connect Wallet"}
       </button>
       {/* <div>
         <w3m-button />
