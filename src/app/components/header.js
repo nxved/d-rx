@@ -3,15 +3,41 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
+import Moralis from "moralis";
 
 export default function Header() {
   const { address } = useAccount();
   const [addr, setAddr] = useState(null);
+  const [ethPrice, setEthPrice] = useState(0.0);
 
   const { open, close } = useWeb3Modal();
   const handleWallet = () => {
     open();
   };
+
+  useEffect(() => {
+    const fetchEthPrice = async () => {
+      try {
+        await Moralis.start({
+          apiKey:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjNjNTdmMWVkLWU2NzctNGYzYS1hNjAyLWRmOTYyNjI2MDdjMyIsIm9yZ0lkIjoiODcwMTEiLCJ1c2VySWQiOiI4NjY1MyIsInR5cGVJZCI6IjFmZTdjNThkLTY5YmUtNDJhZS1iMGU4LTVlYzIwMDUzZDJlZCIsInR5cGUiOiJQUk9KRUNUIiwiaWF0IjoxNjgxOTc5ODY1LCJleHAiOjQ4Mzc3Mzk4NjV9.uYSviH9iZ15n_9LnAxMneS4vrepywNOpHyjPRk0UiRM",
+        });
+
+        const response = await Moralis.EvmApi.token.getTokenPrice({
+          chain: "0x1",
+          address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        });
+        console.log(response.usdPriceFormatted, "format");
+        const jsonResponse = response.getResponse();
+        console.log(jsonResponse);
+        setEthPrice(jsonResponse.usdPriceFormatted);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchEthPrice();
+  }, []);
 
   useEffect(() => {
     if (address) {
@@ -22,7 +48,7 @@ export default function Header() {
   }, [address]);
 
   return (
-    <header className="flex items-center justify-between p-5 bg-black">
+    <header className="flex items-center justify-between p-5 text-white bg-black">
       <div className="flex">
         {/* <Link href="/#">
           <img className="" src="/Token.png" />
@@ -49,6 +75,11 @@ export default function Header() {
             For Individuals
           </Link>
         </div>
+      </div>
+
+      <div className="px-8 py-2 text-xs font-semibold text-white uppercase border ml-[500px]">
+        {/* Display the Ethereum price if available */}
+        <span>Ethereum Price: ${Number(ethPrice).toFixed(2)}</span>
       </div>
       <button
         className="px-8 py-2 text-xs font-semibold uppercase border"
