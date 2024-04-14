@@ -19,17 +19,14 @@ export default function Header() {
     const fetchEthPrice = async () => {
       try {
         await Moralis.start({
-          apiKey:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjNjNTdmMWVkLWU2NzctNGYzYS1hNjAyLWRmOTYyNjI2MDdjMyIsIm9yZ0lkIjoiODcwMTEiLCJ1c2VySWQiOiI4NjY1MyIsInR5cGVJZCI6IjFmZTdjNThkLTY5YmUtNDJhZS1iMGU4LTVlYzIwMDUzZDJlZCIsInR5cGUiOiJQUk9KRUNUIiwiaWF0IjoxNjgxOTc5ODY1LCJleHAiOjQ4Mzc3Mzk4NjV9.uYSviH9iZ15n_9LnAxMneS4vrepywNOpHyjPRk0UiRM",
+          apiKey: process.env.NEXT_PUBLIC_MORALIS_API,
         });
 
         const response = await Moralis.EvmApi.token.getTokenPrice({
           chain: "0x1",
           address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
         });
-        console.log(response.usdPriceFormatted, "format");
         const jsonResponse = response.getResponse();
-        console.log(jsonResponse);
         setEthPrice(jsonResponse.usdPriceFormatted);
       } catch (error) {
         console.error(error);
