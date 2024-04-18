@@ -6,7 +6,7 @@ import { WagmiConfig } from 'wagmi'
 import { sepolia } from 'viem/chains'
 
 // 1. Get projectId at https://cloud.walletconnect.com
-const projectId = 'dd4de393875ceda3c208129ae93bb210'
+const projectId = process.env.NEXT_PUBLIC_PROJECT_ID
 
 // 2. Create wagmiConfig
 const metadata = {

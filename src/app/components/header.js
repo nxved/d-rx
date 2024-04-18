@@ -19,8 +19,7 @@ export default function Header() {
     const fetchEthPrice = async () => {
       try {
         await Moralis.start({
-          apiKey:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6Ijk5ZjNlNDE4LTg2ZWUtNDRmMi05NmU1LTgwMTY3ZDUyOWM4ZCIsIm9yZ0lkIjoiMzg3OTA1IiwidXNlcklkIjoiMzk4NTg3IiwidHlwZUlkIjoiYTkxNWI5MzMtZmJkNS00OTllLTkwNGQtZDRmMDk1NzkxYjU3IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTMwOTIxNzAsImV4cCI6NDg2ODg1MjE3MH0.cEJSsBqUamhtr9eWHscXHPYy_K6jmqq9B-8cLo_sYo8",
+          apiKey: process.env.NEXT_PUBLIC_MORALIS_API,
         });
 
         const response = await Moralis.EvmApi.token.getTokenPrice({
@@ -73,12 +72,13 @@ export default function Header() {
             For Individuals
           </Link>
         </div>
+        <div className="pl-8">
+          <div className="px-8 py-2 text-xs font-semibold uppercase border">
+            Ethereum Price: ${Number(ethPrice).toFixed(2)}
+          </div>
+        </div>
       </div>
 
-      <div className="px-8 py-2 text-xs font-semibold text-white uppercase border ml-[500px]">
-        {/* Display the Ethereum price if available */}
-        <span>Ethereum Price: ${Number(ethPrice).toFixed(2)}</span>
-      </div>
       <button
         className="px-8 py-2 text-xs font-semibold uppercase border"
         onClick={handleWallet}
